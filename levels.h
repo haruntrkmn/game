@@ -474,7 +474,96 @@ void level9(int field[HEIGHT][LENGTH]){
 
     field[8][29] = 1;
 }
+void level10(int field[HEIGHT][LENGTH]){
+    field[1][2] = 1;
+    field[1][7] = 1;
+    field[1][9] = 1;
+    field[1][10] = 1;
+    field[1][11] = 1;
+    field[1][12] = 1;
+    field[1][13] = 1;
+    field[1][14] = 1;
+    field[1][15] = 1;
+    field[1][16] = 1;
+    field[1][17] = 1;
+    field[1][18] = 1;
+    field[1][20] = 1;
+    field[1][27] = 1;
 
+    field[2][1] = 1;
+    field[2][2] = 1;
+    field[2][7] = 1;
+    field[2][8] = 1;
+    field[2][20] = 1;
+    field[2][27] = 1;
+    field[2][10] = 1;
+    field[2][11] = 1;
+    field[2][12] = 1;
+    field[2][13] = 1;
+    field[2][14] = 1;
+    field[2][15] = 1;
+    field[2][16] = 1;
+    field[2][17] = 1;
+    field[2][18] = 1;
+    field[2][19] = 1;
+    field[2][28] = 1;
+
+    field[3][11] = 1;
+    field[3][14] = 1;
+    field[3][15] = 1;
+    field[3][16] = 1;
+    field[3][17] = 1;
+
+    field[4][11] = 1;
+    field[4][12] = 1;
+    field[4][15] = 1;
+
+    field[11][1] = 1;
+    field[11][2] = 1;
+
+    field[12][2] = 1;
+
+    field[13][15] = 1;
+    field[13][18] = 1;
+    field[13][19] = 1;
+    field[13][20] = 1;
+    field[13][21] = 1;
+
+    field[14][1] = 1;
+    field[14][5] = 1;
+    field[14][12] = 1;
+    field[14][13] = 1;
+    field[14][14] = 1;
+    field[14][15] = 1;
+    field[14][17] = 1;
+    field[14][18] = 1;
+    field[14][19] = 1;
+    field[14][27] = 1;
+    field[14][28] = 1;
+
+    field[15][1] = 1;
+    field[15][2] = 1;
+    field[15][3] = 1;
+    field[15][4] = 1;
+    field[15][6] = 1;
+    field[15][12] = 1;
+    field[15][14] = 1;
+    field[15][15] = 1;
+    field[15][17] = 1;
+    field[15][27] = 1;
+
+    field[8][14] = 6;
+    field[15][5] = 6;
+    field[1][28] = 6;
+    field[1][1] = 6;
+    field[15][28] = 6;
+    field[15][13] = 6;
+    field[1][8] = 6;
+    field[1][19] = 6;
+
+
+
+}
 
 
 

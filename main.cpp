@@ -2,6 +2,12 @@
 
 using namespace std;
 
+void wait(float seconds){
+    clock_t endwait;
+    endwait = clock () + seconds * CLOCKS_PER_SEC ;
+    while (clock() < endwait) {}
+}
+
 void gotoxy(int x, int y){
     COORD coord;
     coord.X = x;
@@ -37,6 +43,7 @@ struct e{
     bool MoveDownUp(int &x, int y, int counter, int range, int speed, bool &down, int field[HEIGHT][LENGTH], bool downinit);
     bool MoveLeftRight(int &x, int &y, int counter, int range, int speed, bool &right, int field[HEIGHT][LENGTH], bool rightinit);
     bool MoveRandom(int &x, int &y, int counter, int range, int speed, int field[HEIGHT][LENGTH]);
+    bool Follow(int &x, int &y, int gox, int goy, int counter, int speed, int field[HEIGHT][LENGTH]);
     void info (int ex, int ey);
 };
 
@@ -51,13 +58,13 @@ struct s{
 };
 
 int s::shoot(int field[HEIGHT][LENGTH], int x, int y){
-    if (field[x][y] != 3 && field[x][y] != 4){
+    if (field[x][y] != 3 && field[x][y] != 4  && field[x][y] != 6){
         field[x][y] = 0;
         gotoxy(y * 2 + 1, x);
         cout << " ";
     }
     y++;
-    if (field[x][y] != 4 && field[x][y] != 0 && field[x][y] != 5){
+    if (field[x][y] != 4 && field[x][y] != 0 && field[x][y] != 5  && field[x][y] != 6){
         return 1;
     }
     else if (field[x][y] == 4){
@@ -65,11 +72,12 @@ int s::shoot(int field[HEIGHT][LENGTH], int x, int y){
     }
     else {
         gotoxy(y * 2 + 1, x);
-        cout << "-";
-        field[x][y] = 8;
+        if (field[x][y] != 6){
+            cout << "-";
+            field[x][y] = 8;
+        }
         return 0;
     }
-
 }
 
 void f::create(){
@@ -124,6 +132,9 @@ void f::print(){
             }
             else if (field[i][j] == 3){
                 cout << " O";
+            }
+            else if (field[i][j] == 4){
+                cout << " X";
             }
             else if (field[i][j] == 6){
                 cout << " +";
@@ -334,7 +345,6 @@ bool e::MoveDownUp(int &x, int y, int counter, int range, int speed, bool &down,
     }
     return 0;
 }
-
 bool e::MoveLeftRight(int &x, int &y, int counter, int range, int speed, bool &right, int field[HEIGHT][LENGTH], bool rightinit){
     struct f fieldstr;
     int rightborder;
@@ -562,10 +572,198 @@ bool e::MoveRandom(int &x, int &y, int counter, int range, int speed, int field[
     return 0;
 }
 
-void e::info(int x, int y){
-    gotoxy(1, HEIGHT + 3);
-    cout << "\t\t\t\t\r";
-    cout << " enemy: " << x << " " << y;
+bool e::Follow(int &x, int &y, int gox, int goy, int counter, int speed, int field[HEIGHT][LENGTH]){
+    if (counter % speed == 0){
+        if (gox == x && goy > y){
+            ///go right
+            if (field[x][y + 1] != 4 && field[x][y + 1] != 1  && field[x][y + 1] != 7){
+                gotoxy(y * 2 + 1, x);
+                cout << " ";
+                y++;
+                gotoxy(2 * y + 1, x);
+                cout << "X";
+                if (field[x][y] == 3){
+                    if (field[x][y - 1] != 6){
+                        field[x][y - 1] = 0;
+                    }
+                    return 1;
+                }
+                if (field[x][y - 1] != 6){
+                    field[x][y - 1] = 0;
+                }
+                if (field[x][y] != 6){
+                    field[x][y] = 4;
+                }
+                return 0;
+            }
+        }
+        else if (gox < x && goy > y){
+            ///go right up
+            if (field[x - 1][y + 1] != 4 && field[x - 1][y + 1] != 1  && field[x - 1][y + 1] != 7){
+                gotoxy(y * 2 + 1, x);
+                cout << " ";
+                x--;
+                y++;
+                gotoxy(2 * y + 1, x);
+                cout << "X";
+                if (field[x][y] == 3){
+                    if (field[x + 1][y + 1] != 6){
+                        field[x + 1][y - 1] = 0;
+                    }
+                    return 1;
+                }
+                if (field[x + 1][y - 1]){
+                    field[x + 1][y - 1] = 0;
+                }
+                if (field[x][y] != 6){
+                    field[x][y] = 4;
+                }
+                return 0;
+            }
+        }
+        else if (gox < x && goy == y){
+            ///go up
+            if (field[x - 1][y] != 4 && field[x - 1][y] != 1  && field[x - 1][y] != 7){
+                gotoxy(y * 2 + 1, x);
+                cout << " ";
+                x--;
+                gotoxy(2 * y + 1, x);
+                cout << "X";
+                if (field[x][y] == 3){
+                    if (field[x][y] != 6){
+                        field[x + 1][y] = 0;
+                    }
+                    return 1;
+                }
+                if (field[x + 1][y] != 6){
+                    field[x + 1][y] = 0;
+                }
+                if (field[x][y] != 6){
+                    field[x][y] = 4;
+                }
+                return 0;
+            }
+        }
+        else if (gox < x && goy < y){
+            ///go left up
+            if (field[x - 1][y - 1] != 4 && field[x - 1][y - 1] != 1  && field[x - 1][y - 1] != 1){
+                gotoxy(y * 2 + 1, x);
+                cout << " ";
+                x--;
+                y--;
+                gotoxy(2 * y + 1, x);
+                cout << "X";
+                if (field[x][y] == 3){
+                    if (field[x + 1][y + 1] != 6){
+                        field[x + 1][y + 1] = 0;
+                    }
+                    return 1;
+                }
+                if (field[x + 1][y + 1] != 6){
+                    field[x + 1][y + 1] = 0;
+                }
+                if (field[x][y] != 6){
+                    field[x][y] = 4;
+                }
+                return 0;
+            }
+        }
+        else if (gox == x && goy < y){
+            ///go left
+            if (field[x][y - 1] != 4 && field[x][y - 1] != 1  && field[x][y - 1] != 7){
+                gotoxy(y * 2 + 1, x);
+                cout << " ";
+                y--;
+                gotoxy(2 * y + 1, x);
+                cout << "X";
+                if (field[x][y] == 3){
+                    if (field[x][y + 1] != 6){
+                        field[x][y + 1] = 0;
+                    }
+                    return 1;
+                }
+                if (field[x][y + 1] != 6){
+                    field[x][y + 1] = 0;
+                }
+                if (field[x][y] != 6){
+                    field[x][y] = 4;
+                }
+                return 0;
+            }
+        }
+        else if (gox > x && goy < y){
+            ///go left down
+            if (field[x + 1][y - 1] != 4 && field[x + 1][y - 1] != 1  && field[x + 1][y - 1] != 7){
+                gotoxy(y * 2 + 1, x);
+                cout << " ";
+                x++;
+                y--;
+                gotoxy(2 * y + 1, x);
+                cout << "X";
+                if (field[x][y] == 3){
+                    if (field[x - 1][y + 1] != 6){
+                        field[x - 1][y + 1] = 0;
+                    }
+                    return 1;
+                }
+                if (field[x - 1][y + 1] != 6){
+                    field[x - 1][y + 1] = 0;
+                }
+                if (field[x][y] != 6){
+                    field[x][y] = 4;
+                }
+                return 0;
+            }
+        }
+        else if (gox > x && goy == y){
+            ///go down
+            if (field[x + 1][y] != 4 && field[x + 1][y] != 1  && field[x + 1][y] != 7){
+                gotoxy(y * 2 + 1, x);
+                cout << " ";
+                x++;
+                gotoxy(2 * y + 1, x);
+                cout << "X";
+                if (field[x][y] == 3){
+                    if (field[x - 1][y] != 6){
+                        field[x - 1][y] = 0;
+                    }
+                    return 1;
+                }
+                if (field[x - 1][y] != 6){
+                    field[x - 1][y] = 0;
+                }
+                if (field[x][y] != 6){
+                    field[x][y] = 4;
+                }
+                return 0;
+            }
+        }
+        else if (gox > x && goy > y){
+            ///go right down
+            if (field[x + 1][y + 1] != 4 && field[x + 1][y + 1] != 1  && field[x + 1][y + 1] != 7){
+                gotoxy(y * 2 + 1, x);
+                cout << " ";
+                x++;
+                y++;
+                gotoxy(2 * y + 1, x);
+                cout << "X";
+                if (field[x][y] == 3){
+                    if (field[x - 1][y - 1] != 6){
+                        field[x - 1][y - 1] = 0;
+                    }
+                    return 1;
+                }
+                if (field[x - 1][y - 1] != 6){
+                    field[x - 1][y - 1] = 0;
+                }
+                if (field[x][y] != 6){
+                    field[x][y] = 4;
+                }
+                return 0;
+            }
+        }
+    }
+    return 0;
 }
 
 void pointreplacer(int field[HEIGHT][LENGTH]){
@@ -604,8 +802,8 @@ int main(){
     srand(time(NULL));
     struct f fieldstr;
     struct p player;
-    struct b point, point1, point2, point3, point4, point5, point6, point7, point8;
-    struct e enemy1, enemy2, enemy3, enemy4, enemy5, enemy6, enemy7, enemy8;
+    struct b point1, point2, point3, point4, point5, point6, point7, point8;
+    struct e enemy1, enemy2, enemy3, enemy4, enemy5, enemy6, enemy7, enemy8, enemym1, enemym2, enemym3, enemym4;
     struct s bullet;
     int i, j, k;
     char c = ' ';
@@ -614,11 +812,14 @@ int main(){
     bool init = 1;
     bool dynamic = 0;
     bool ifpoint = 0;
-    bool shoot = 0;
+    bool iffollow = 0;
+    bool shooting = 0;
     bool hit = 0;
     bool ifshot = 0;
     bool restart = 0;
     bool dooropen = 0;
+    bool first = 1;
+    bool first1 = 1;
     int counter = 0;
     int level = 0;
     player.score = 0;
@@ -736,7 +937,7 @@ int main(){
                 enemy4.xinit = enemy4.x;
                 enemy4.yinit = enemy4.y;
                 enemy4.range = 4;
-                enemy4.speed = 4;
+                enemy4.speed = 8;
                 enemy4.gothit = 0;
 
                 winmessage = "well done";
@@ -748,7 +949,7 @@ int main(){
                 init = 0;
             }
 
-            Sleep(5);
+            wait(0.01);
             hit += enemy1.MoveDownUp(enemy1.x, enemy1.y, counter, enemy1.range, enemy1.speed, enemy1.down, fieldstr.field, 1);
             hit += enemy2.MoveDownUp(enemy2.x, enemy2.y, counter, enemy2.range, enemy2.speed, enemy2.down, fieldstr.field, 1);
             hit += enemy3.MoveLeftRight(enemy3.x, enemy3.y, counter, enemy3.range, enemy3.speed, enemy3.right, fieldstr.field, 0);
@@ -762,23 +963,23 @@ int main(){
             if (init){
                 dynamic = 0;
                 ifpoint = 0;
-                point.x = 3;
-                point.y = 15;
-                point.gotpoint = 0;
+                point1.x = 3;
+                point1.y = 15;
+                point1.gotpoint = 0;
                 winmessage = "well done";
                 fieldstr.print();
                 fieldstr.field[8][29] = 1;
                 gotoxy(59, 8);
                 cout << "x";
-                gotoxy(point.y * 2 + 1, point.x);
+                gotoxy(point1.y * 2 + 1, point1.x);
                 cout << "+";
                 gotoxy(1 ,HEIGHT);
                 cout << "-----------------------------" << endl;
                 cout << " level 4: that is a real point" ;
                 init = 0;
             }
-            if (player.x == point.x && player.y == point.y && point.gotpoint == 0){
-                point.gotpoint = 1;
+            if (player.x == point1.x && player.y == point1.y && point1.gotpoint == 0){
+                point1.gotpoint = 1;
                 gotoxy(1 ,HEIGHT + 2);
                 cout << "you got the point" ;
                 fieldstr.field[8][29] = 2;
@@ -798,7 +999,7 @@ int main(){
                 enemy1.xinit = enemy1.x;
                 enemy1.yinit = enemy1.y;
                 enemy1.range = 1;
-                enemy1.speed = 32;
+                enemy1.speed = 16;
                 enemy1.gothit = 0;
 
                 enemy2.x = 3;
@@ -807,7 +1008,7 @@ int main(){
                 enemy2.xinit = enemy2.x;
                 enemy2.yinit = enemy2.y;
                 enemy2.range = 1;
-                enemy2.speed = 32;
+                enemy2.speed = 16;
                 enemy2.gothit = 0;
 
                 enemy3.x = 6;
@@ -855,7 +1056,7 @@ int main(){
                 init = 0;
             }
 
-            Sleep(5);
+            wait(0.01);
             hit += enemy1.MoveLeftRight(enemy1.x, enemy1.y, counter, enemy1.range, enemy1.speed, enemy1.right, fieldstr.field, 1);
             hit += enemy2.MoveDownUp(enemy2.x, enemy2.y, counter, enemy2.range, enemy2.speed, enemy2.down, fieldstr.field, 1);
             hit += enemy3.MoveLeftRight(enemy3.x, enemy3.y, counter, enemy3.range, enemy3.speed, enemy3.right, fieldstr.field, 1);
@@ -881,25 +1082,25 @@ int main(){
                 enemy1.speed = 8;
                 enemy1.gothit = 0;
 
-                point.x = 1;
-                point.y = 28;
-                point.gotpoint = 0;
-                message = "----------------------------\n level 6: unpredictable moves";
+                point1.x = 1;
+                point1.y = 28;
+                point1.gotpoint = 0;
+                message = "--------------------------\n level 6: monster in a cage";
                 winmessage = "well done";
                 hitmessage = "try again";
                 fieldstr.print();
                 fieldstr.field[8][29] = 1;
                 gotoxy(59, 8);
                 cout << "x";
-                fieldstr.field[point.x][point.y] = 6;
-                gotoxy(point.y * 2 + 1, point.x);
+                fieldstr.field[point1.x][point1.y] = 6;
+                gotoxy(point1.y * 2 + 1, point1.x);
                 cout << "+";
                 gotoxy(1, HEIGHT);
                 cout << message;
                 init = 0;
             }
-            if (player.x == point.x && player.y == point.y && point.gotpoint == 0){
-                point.gotpoint = 1;
+            if (player.x == point1.x && player.y == point1.y && point1.gotpoint == 0){
+                point1.gotpoint = 1;
                 gotoxy(1 ,HEIGHT);
                 cout << "                              " << endl;
                 cout << "                              " << endl;
@@ -911,7 +1112,7 @@ int main(){
                 cout << " ";
             }
 
-            Sleep(5);
+            wait(0.01);
             hit += enemy1.MoveRandom(enemy1.x, enemy1.y, counter, enemy1.range, enemy1.speed, fieldstr.field);
             counter++;
             if (counter == 64){
@@ -987,7 +1188,7 @@ int main(){
 
 
 
-                message = "------------------------\n level 7: annoying level";
+                message = "-----------------------\n level 7: annoying level";
                 winmessage = "well done";
                 hitmessage = "try again";
                 fieldstr.print();
@@ -1032,7 +1233,7 @@ int main(){
             }
 
 
-            Sleep(5);
+            wait(0.01);
             hit += enemy1.MoveDownUp(enemy1.x, enemy1.y, counter, enemy1.range, enemy1.speed, enemy1.down, fieldstr.field, 1);
             hit += enemy2.MoveDownUp(enemy2.x, enemy2.y, counter, enemy2.range, enemy2.speed, enemy2.down, fieldstr.field, 0);
             hit += enemy3.MoveDownUp(enemy3.x, enemy3.y, counter, enemy3.range, enemy3.speed, enemy3.down, fieldstr.field, 1);
@@ -1046,7 +1247,7 @@ int main(){
             if (init){
                 dynamic = 1;
                 ifpoint = 0;
-                shoot = 1;
+                shooting = 1;
                 levelpass = 45;
 
                 enemy1.x = 1;
@@ -1093,7 +1294,7 @@ int main(){
             }
 
 
-            Sleep(5);
+            wait(0.01);
             if (!enemy1.gothit){
                 hit += enemy1.MoveDownUp(enemy1.x, enemy1.y, counter, enemy1.range, enemy1.speed, enemy1.down, fieldstr.field, 1);
             }
@@ -1124,8 +1325,8 @@ int main(){
         else if (level == 9){
             if (init){
                 dynamic = 1;
-                ifpoint =1;
-                shoot = 0;
+                ifpoint = 1;
+                shooting = 0;
                 level9(fieldstr.field);
 
                 enemy1.x = 1;
@@ -1162,7 +1363,7 @@ int main(){
 
                 point1.x = 1;
                 point1.y = 17;
-                point.gotpoint = 0;
+                point1.gotpoint = 0;
                 message = "--------------------\n level 9: hidden door";
                 winmessage = "you found the door!";
                 hitmessage = "try again";
@@ -1189,7 +1390,7 @@ int main(){
                 point1.gotpoint = 1;
             }
 
-            Sleep(5);
+            wait(0.01);
             hit += enemy1.MoveLeftRight(enemy1.x, enemy1.y, counter, enemy1.range, enemy1.speed, enemy1.right, fieldstr.field, 0);
             hit += enemy2.MoveLeftRight(enemy2.x, enemy2.y, counter, enemy2.range, enemy2.speed, enemy2.right, fieldstr.field, 0);
             hit += enemy3.MoveLeftRight(enemy3.x, enemy3.y, counter, enemy3.range, enemy3.speed, enemy3.right, fieldstr.field, 0);
@@ -1197,6 +1398,179 @@ int main(){
             counter++;
             if (counter == 64){
                 counter = 0;
+            }
+        }
+        else if (level == 10){
+            if (init){
+                dooropen = 0;
+                dynamic = 1;
+                ifpoint = 1;
+                shooting = 1;
+                iffollow = 1;
+                levelpass = 5;
+                level10(fieldstr.field);
+
+                enemym1.x = 12;
+                enemym1.y = 1;
+                enemym1.xinit = enemym1.x;
+                enemym1.yinit = enemym1.y;
+                enemym1.speed = 32;
+
+                enemym2.x = 3;
+                enemym2.y = 12;
+                enemym2.xinit = enemym2.x;
+                enemym2.yinit = enemym2.y;
+                enemym2.speed = 32;
+
+                enemym3.x = 14;
+                enemym3.y = 16;
+                enemym3.xinit = enemym3.x;
+                enemym3.yinit = enemym3.y;
+                enemym3.speed = 32;
+
+                enemym4.x = 14;
+                enemym4.y = 22;
+                enemym4.xinit = enemym4.x;
+                enemym4.yinit = enemym4.y;
+                enemym4.speed = 32;
+
+                point1.x = 8;
+                point1.y = 14;
+                point1.gotpoint = 0;
+                point2.x = 15;
+                point2.y = 5;
+                point2.gotpoint = 0;
+                point3.x = 1;
+                point3.y = 28;
+                point3.gotpoint = 0;
+                point4.x = 1;
+                point4.y = 1;
+                point4.gotpoint = 0;
+                point5.x = 15;
+                point5.y = 28;
+                point5.gotpoint = 0;
+                point6.x = 15;
+                point6.y = 13;
+                point6.gotpoint = 0;
+                point7.x = 1;
+                point7.y = 8;
+                point7.gotpoint = 0;
+                point8.x = 1;
+                point8.y = 19;
+                point8.gotpoint = 0;
+
+                message = "-----------------------------\n level 10: do not wake them up";
+                winmessage = "you survived!";
+                hitmessage = "try again";
+                fieldstr.field[8][29] = 1;
+                fieldstr.print();
+                gotoxy(point1.y * 2 + 1, point1.x);
+                cout << "+";
+                gotoxy(1, HEIGHT);
+                cout << message;
+                gotoxy(49, HEIGHT);
+                cout << "-----------";
+                gotoxy(49, HEIGHT + 1);
+                cout << "kills: 0/" << levelpass;
+                init = 0;
+            }
+
+            if (player.x == point1.x && player.y == point1.y && point1.gotpoint == 0){
+                fieldstr.field[14][5] = 7;
+                gotoxy(11, 14);
+                cout << " ";
+                point1.gotpoint = 1;
+            }
+            if (player.x == point2.x && player.y == point2.y && point2.gotpoint == 0){
+                fieldstr.field[15][27] = 7;
+                gotoxy(55, 15);
+                cout << " ";
+                point2.gotpoint = 1;
+            }
+            if (player.x == point3.x && player.y == point3.y && point3.gotpoint == 0){
+                fieldstr.field[1][2] = 7;
+                gotoxy(5, 1);
+                cout << " ";
+                point3.gotpoint = 1;
+            }
+            if (player.x == point4.x && player.y == point4.y && point4.gotpoint == 0){
+                fieldstr.field[2][28] = 7;
+                gotoxy(57, 2);
+                cout << " ";
+                point4.gotpoint = 1;
+            }
+            if (player.x == point5.x && player.y == point5.y && point5.gotpoint == 0){
+                fieldstr.field[14][13] = 7;
+                gotoxy(27, 14);
+                cout << " ";
+                point5.gotpoint = 1;
+            }
+            if (player.x == point6.x && player.y == point6.y && point6.gotpoint == 0){
+                fieldstr.field[1][7] = 7;
+                gotoxy(15, 1);
+                cout << " ";
+                point6.gotpoint = 1;
+            }
+            if (player.x == point7.x && player.y == point7.y && point7.gotpoint == 0){
+                fieldstr.field[1][20] = 7;
+                gotoxy(41, 1);
+                cout << " ";
+                point7.gotpoint = 1;
+            }
+            else if (player.x == point8.x && player.y == point8.y  && point8.gotpoint == 0 && first1){
+                if (dooropen){
+                    fieldstr.field[8][29] = 2;
+                    gotoxy(59, 8);
+                    cout << " ";
+                    point8.gotpoint = 1;
+                    gotoxy(1, HEIGHT + 2);
+                    cout << "                                  ";
+                    gotoxy(1, HEIGHT + 2);
+                    cout << "door is open";
+                }
+                else {
+                    dooropen = 1;
+                    gotoxy(59, 8);
+                    cout << " ";
+                    point8.gotpoint = 1;
+                    gotoxy(1, HEIGHT + 2);
+                    cout << "                                  ";
+                    gotoxy(1, HEIGHT + 2);
+                    cout << "now kill";
+                    first1 = 0;
+                }
+            }
+
+            wait(0.01);
+
+            hit += enemym1.Follow(enemym1.x, enemym1.y, player.x, player.y, counter, enemym1.speed, fieldstr.field);
+            hit += enemym2.Follow(enemym2.x, enemym2.y, player.x, player.y, counter, enemym2.speed, fieldstr.field);
+            hit += enemym3.Follow(enemym3.x, enemym3.y, player.x, player.y, counter, enemym3.speed, fieldstr.field);
+            hit += enemym4.Follow(enemym4.x, enemym4.y, player.x, player.y, counter, enemym4.speed, fieldstr.field);
+
+            counter++;
+            if (counter == 64){
+                counter = 0;
+            }
+
+            else if (player.score >= levelpass && first){
+                if (dooropen){
+                    gotoxy(1, HEIGHT + 3);
+                    cout << "                                 ";
+                    gotoxy(1, HEIGHT + 3);
+                    cout << "door is open";
+                    fieldstr.field[8][29] = 2;
+                    gotoxy(59, 8);
+                    cout << " ";
+                }
+                else {
+                    dooropen = 1;
+                    gotoxy(1, HEIGHT + 3);
+                    cout << "                                 ";
+                    gotoxy(1, HEIGHT + 3);
+                    cout << "collect all points";
+                    first = 0;
+                }
             }
         }
         if (!dynamic){
@@ -1210,14 +1584,14 @@ int main(){
             if (_kbhit()){
                 c = getch();
             };
-            if (c == 'v' && shoot && !ifshot){
+            if (c == 'v' && shooting && !ifshot){
                 bullet.x = player.x;
                 bullet.y = player.y;
                 bullet.xint = player.x;
                 bullet.yint = player.y;
                 ifshot = 1;
             }
-            if (ifshot && counter % 2 == 0){
+            if (ifshot && counter % 3 == 0){
                 if (bullet.shoot(fieldstr.field, bullet.x, bullet.y) == 0){
                     bullet.y++;
                 }
@@ -1295,6 +1669,38 @@ int main(){
                         gotoxy(49, HEIGHT + 1);
                         cout << "score:" << player.score << "/" << levelpass;
                     }
+                    else if (bullet.x == enemym1.x && bullet.y + 1 == enemym1.y){
+                        enemym1.x = 2;
+                        enemym1.y = 9;
+                        gotoxy(49, HEIGHT + 1);
+                        cout << "                             ";
+                        gotoxy(49, HEIGHT + 1);
+                        cout << "kills: " << player.score << "/" << levelpass;
+                    }
+                    else if (bullet.x == enemym2.x && bullet.y + 1 == enemym2.y){
+                        enemym2.x = 1;
+                        enemym2.y = 25;
+                        gotoxy(49, HEIGHT + 1);
+                        cout << "                             ";
+                        gotoxy(49, HEIGHT + 1);
+                        cout << "kills: " << player.score << "/" << levelpass;
+                    }
+                    else if (bullet.x == enemym3.x && bullet.y + 1 == enemym3.y){
+                        enemym3.x = 12;
+                        enemym3.y = 25;
+                        gotoxy(49, HEIGHT + 1);
+                        cout << "                             ";
+                        gotoxy(49, HEIGHT + 1);
+                        cout << "kills: " << player.score << "/" << levelpass;
+                    }
+                    else if (bullet.x == enemym4.x && bullet.y + 1 == enemym4.y){
+                        enemym4.x = 12;
+                        enemym4.y = 5;
+                        gotoxy(49, HEIGHT + 1);
+                        cout << "                             ";
+                        gotoxy(49, HEIGHT + 1);
+                        cout << "kills: " << player.score << "/" << levelpass;
+                    }
                 }
             }
 
@@ -1302,10 +1708,41 @@ int main(){
             c = ' ';
             /// hit
             if (hit){
+                if (iffollow){
+                    gotoxy(1, HEIGHT + 3);
+                    cout << "                    ";
+                    first = 1;
+                    first1 = 1;
+                    dooropen = 0;
+                    fieldstr.field[enemym1.x][enemym1.y] = 0;
+                    gotoxy(enemym1.y * 2 + 1, enemym1.x);
+                    cout << " ";
+                    enemym1.x = enemym1.xinit;
+                    enemym1.y = enemym1.yinit;
+
+                    fieldstr.field[enemym2.x][enemym2.y] = 0;
+                    gotoxy(enemym2.y * 2 + 1, enemym2.x);
+                    cout << " ";
+                    enemym2.x = enemym2.xinit;
+                    enemym2.y = enemym2.yinit;
+
+                    fieldstr.field[enemym3.x][enemym3.y] = 0;
+                    gotoxy(enemym3.y * 2 + 1, enemym3.x);
+                    cout << " ";
+                    enemym3.x = enemym3.xinit;
+                    enemym3.y = enemym3.yinit;
+
+                    fieldstr.field[enemym4.x][enemym4.y] = 0;
+                    gotoxy(enemym4.y * 2 + 1, enemym4.x);
+                    cout << " ";
+                    enemym4.x = enemym4.xinit;
+                    enemym4.y = enemym4.yinit;
+                }
+
+
                 /// point replacing
                 if (ifpoint){
                     pointreplacer(fieldstr.field);
-                    point.gotpoint = 0;
                     point1.gotpoint = 0;
                     point2.gotpoint = 0;
                     point3.gotpoint = 0;
@@ -1319,7 +1756,7 @@ int main(){
                 }
 
                 player.score = 0;
-                if (shoot){
+                if (shooting){
                     player.score = 0;
                     enemy1.gothit = 0;
                     enemy2.gothit = 0;
@@ -1332,7 +1769,14 @@ int main(){
                     gotoxy(49, HEIGHT);
                     cout << "-----------";
                     gotoxy(49, HEIGHT + 1);
-                    cout << "score: 0/" << levelpass;
+                    cout << "                            ";
+                    gotoxy(49, HEIGHT + 1);
+                    if (iffollow){
+                        cout << "kills: 0/" << levelpass;
+                    }
+                    else {
+                        cout << "score: 0/" << levelpass;
+                    }
                 }
                 gotoxy(1 ,HEIGHT + 2);
                 cout << "                                       ";
@@ -1344,10 +1788,11 @@ int main(){
                 cout << " ";
                 player.x = HEIGHT / 2;
                 player.y = 1;
+                fieldstr.field[player.x][player.y] = 3;
                 gotoxy(player.y * 2 + 1, player.x);
                 cout << "O";
             }
-            else if (shoot && restart){
+            else if (shooting && restart){
                 player.score = 0;
                 fieldstr.field[player.x][player.y] = 0;
                 gotoxy(player.y * 2 + 1, player.x);
@@ -1380,7 +1825,6 @@ int main(){
             player.score = 0;
             levelpass = 0;
             restart = 0;
-            point.gotpoint = 0;
             point1.gotpoint = 0;
             point2.gotpoint = 0;
             point3.gotpoint = 0;
@@ -1390,7 +1834,7 @@ int main(){
             point7.gotpoint = 0;
             point8.gotpoint = 0;
             init = 1;
-            shoot = 0;
+            shooting = 0;
             fieldstr.create();
             player.x = HEIGHT / 2;
             player.y = 1;
