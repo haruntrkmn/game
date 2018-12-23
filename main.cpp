@@ -821,7 +821,7 @@ int main(){
     bool first = 1;
     bool first1 = 1;
     int counter = 0;
-    int level = 8;
+    int level = 0;
     player.score = 0;
     int levelpass = 0;
     fieldstr.create();
@@ -1131,7 +1131,7 @@ int main(){
                 enemy1.xinit = enemy1.x;
                 enemy1.yinit = enemy1.y;
                 enemy1.range = 3;
-                enemy1.speed = 32;
+                enemy1.speed = 64;
                 enemy1.gothit = 0;
 
                 enemy2.x = 14;
@@ -1140,7 +1140,7 @@ int main(){
                 enemy2.xinit = enemy2.x;
                 enemy2.yinit = enemy2.y;
                 enemy2.range = 3;
-                enemy2.speed = 32;
+                enemy2.speed = 64;
                 enemy2.gothit = 0;
 
                 enemy3.x = 2;
@@ -1149,7 +1149,7 @@ int main(){
                 enemy3.xinit = enemy3.x;
                 enemy3.yinit = enemy3.y;
                 enemy3.range = 3;
-                enemy3.speed = 32;
+                enemy3.speed = 64;
                 enemy3.gothit = 0;
 
                 enemy4.x = 14;
@@ -1158,7 +1158,7 @@ int main(){
                 enemy4.xinit = enemy4.x;
                 enemy4.yinit = enemy4.y;
                 enemy4.range = 3;
-                enemy4.speed = 32;
+                enemy4.speed = 64;
                 enemy4.gothit = 0;
 
                 point1.x = 1;
@@ -1256,7 +1256,7 @@ int main(){
                 enemy1.xinit = enemy1.x;
                 enemy1.yinit = enemy1.y;
                 enemy1.range = 6;
-                enemy1.speed = 8;
+                enemy1.speed = 16;
                 enemy1.gothit = 0;
 
                 enemy2.x = 15;
@@ -1265,7 +1265,7 @@ int main(){
                 enemy2.xinit = enemy2.x;
                 enemy2.yinit = enemy2.y;
                 enemy2.range = 6;
-                enemy2.speed = 8;
+                enemy2.speed = 16;
                 enemy2.gothit = 0;
 
                 enemy3.x = 8;
@@ -1273,7 +1273,7 @@ int main(){
                 enemy3.xinit = enemy3.x;
                 enemy3.yinit = enemy3.y;
                 enemy3.range = 3;
-                enemy3.speed = 8;
+                enemy3.speed = 16;
                 enemy3.gothit = 0;
 
                 message = "-------------------------\n level 8: press v to shoot";
@@ -1335,7 +1335,7 @@ int main(){
                 enemy1.xinit = enemy1.x;
                 enemy1.yinit = enemy1.y;
                 enemy1.range = 2;
-                enemy1.speed = 32;
+                enemy1.speed = 64;
 
                 enemy2.x = 1;
                 enemy2.y = 16;
@@ -1343,7 +1343,7 @@ int main(){
                 enemy2.xinit = enemy2.x;
                 enemy2.yinit = enemy2.y;
                 enemy2.range = 5;
-                enemy2.speed = 16;
+                enemy2.speed = 32;
 
                 enemy3.x = 2;
                 enemy3.y = 17;
@@ -1351,7 +1351,7 @@ int main(){
                 enemy3.xinit = enemy3.x;
                 enemy3.yinit = enemy3.y;
                 enemy3.range = 5;
-                enemy3.speed = 16;
+                enemy3.speed = 32;
 
                 enemy4.x = 2;
                 enemy4.y = 22;
@@ -1359,7 +1359,7 @@ int main(){
                 enemy4.xinit = enemy4.x;
                 enemy4.yinit = enemy4.y;
                 enemy4.range = 5;
-                enemy4.speed = 16;
+                enemy4.speed = 32;
 
                 point1.x = 1;
                 point1.y = 17;
@@ -1414,25 +1414,25 @@ int main(){
                 enemym1.y = 1;
                 enemym1.xinit = enemym1.x;
                 enemym1.yinit = enemym1.y;
-                enemym1.speed = 32;
+                enemym1.speed = 64;
 
                 enemym2.x = 3;
                 enemym2.y = 12;
                 enemym2.xinit = enemym2.x;
                 enemym2.yinit = enemym2.y;
-                enemym2.speed = 32;
+                enemym2.speed = 64;
 
                 enemym3.x = 14;
                 enemym3.y = 16;
                 enemym3.xinit = enemym3.x;
                 enemym3.yinit = enemym3.y;
-                enemym3.speed = 32;
+                enemym3.speed = 64;
 
                 enemym4.x = 14;
                 enemym4.y = 22;
                 enemym4.xinit = enemym4.x;
                 enemym4.yinit = enemym4.y;
-                enemym4.speed = 32;
+                enemym4.speed = 64;
 
                 point1.x = 8;
                 point1.y = 14;
