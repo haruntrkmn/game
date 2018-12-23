@@ -630,7 +630,7 @@ bool e::Follow(int &x, int &y, int gox, int goy, int counter, int speed, int fie
                 gotoxy(2 * y + 1, x);
                 cout << "X";
                 if (field[x][y] == 3){
-                    if (field[x][y] != 6){
+                    if (field[x + 1][y] != 6){
                         field[x + 1][y] = 0;
                     }
                     return 1;
@@ -825,6 +825,7 @@ int main(){
     player.score = 0;
     int levelpass = 0;
     fieldstr.create();
+    char password[7];
     string message = " ";
     string winmessage = " ";
     string hitmessage = " ";
@@ -1440,13 +1441,13 @@ int main(){
                 point2.x = 15;
                 point2.y = 5;
                 point2.gotpoint = 0;
-                point3.x = 1;
+                point3.x = 15;
                 point3.y = 28;
                 point3.gotpoint = 0;
                 point4.x = 1;
                 point4.y = 1;
                 point4.gotpoint = 0;
-                point5.x = 15;
+                point5.x = 1;
                 point5.y = 28;
                 point5.gotpoint = 0;
                 point6.x = 15;
@@ -1530,8 +1531,6 @@ int main(){
                 }
                 else {
                     dooropen = 1;
-                    gotoxy(59, 8);
-                    cout << " ";
                     point8.gotpoint = 1;
                     gotoxy(1, HEIGHT + 2);
                     cout << "                                  ";
@@ -1572,6 +1571,18 @@ int main(){
                     first = 0;
                 }
             }
+        }
+        else if (level == 11){
+            cout << "there was a hidden password in level 0: " << endl;
+            for (i = 0 ; i < 7 ; i++){
+                do{
+                    c = getch();
+                }while (i == 0 && c != 'w' || i == 1 && c != 'a' || i == 2 && c != 's' || i == 3 && c != 'd' || i == 4 && c != 't' || i == 5 && c != 'o' || i == 6 && c != 'e');
+                cout << c;
+            }
+            cout << endl << "congrats! the game is over. thanks for playing." << endl;
+            getch();
+            return 0;
         }
         if (!dynamic){
             do{
@@ -1670,7 +1681,7 @@ int main(){
                         cout << "score:" << player.score << "/" << levelpass;
                     }
                     else if (bullet.x == enemym1.x && bullet.y + 1 == enemym1.y){
-                        enemym1.x = 2;
+                        enemym1.x = 3;
                         enemym1.y = 9;
                         gotoxy(49, HEIGHT + 1);
                         cout << "                             ";
@@ -1694,8 +1705,8 @@ int main(){
                         cout << "kills: " << player.score << "/" << levelpass;
                     }
                     else if (bullet.x == enemym4.x && bullet.y + 1 == enemym4.y){
-                        enemym4.x = 12;
-                        enemym4.y = 5;
+                        enemym4.x = 15;
+                        enemym4.y = 10;
                         gotoxy(49, HEIGHT + 1);
                         cout << "                             ";
                         gotoxy(49, HEIGHT + 1);
