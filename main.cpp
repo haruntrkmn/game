@@ -821,7 +821,7 @@ int main(){
     bool first = 1;
     bool first1 = 1;
     int counter = 0;
-    int level = 0;
+    int level = 8;
     player.score = 0;
     int levelpass = 0;
     fieldstr.create();
@@ -999,7 +999,7 @@ int main(){
                 enemy1.xinit = enemy1.x;
                 enemy1.yinit = enemy1.y;
                 enemy1.range = 1;
-                enemy1.speed = 16;
+                enemy1.speed = 32;
                 enemy1.gothit = 0;
 
                 enemy2.x = 3;
@@ -1008,7 +1008,7 @@ int main(){
                 enemy2.xinit = enemy2.x;
                 enemy2.yinit = enemy2.y;
                 enemy2.range = 1;
-                enemy2.speed = 16;
+                enemy2.speed = 32;
                 enemy2.gothit = 0;
 
                 enemy3.x = 6;
@@ -1017,7 +1017,7 @@ int main(){
                 enemy3.xinit = enemy3.x;
                 enemy3.yinit = enemy3.y;
                 enemy3.range = 2;
-                enemy3.speed = 16;
+                enemy3.speed = 32;
                 enemy3.gothit = 0;
 
                 enemy4.x = 7;
@@ -1079,7 +1079,7 @@ int main(){
                 enemy1.xinit = enemy1.x;
                 enemy1.yinit = enemy1.y;
                 enemy1.range = 3;
-                enemy1.speed = 8;
+                enemy1.speed = 16;
                 enemy1.gothit = 0;
 
                 point1.x = 1;
