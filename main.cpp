@@ -1408,7 +1408,7 @@ int main(){
                 ifpoint = 1;
                 shooting = 1;
                 iffollow = 1;
-                levelpass = 5;
+                levelpass = 75;
                 level10(fieldstr.field);
 
                 enemym1.x = 12;
